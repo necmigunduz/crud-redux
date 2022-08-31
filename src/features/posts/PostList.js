@@ -1,52 +1,34 @@
 import { useSelector } from "react-redux";
-
+import PostCard from "../../components/postCard";
 
 const PostList = () => {
-  const Posts = useSelector((state) => state.posts)
+  const Posts = useSelector((state) => state.posts);
+  console.log(Posts);
+ 
   return (
+    <div className="mx-8 my-8">
       <div>
+        <h1 className="text-3xl font-bold underline">Posts by User</h1>
+      </div>
+      <div className="flex m-8">
         <div>
-          <h1>Posts by User</h1>
+          <button className="border-2 border-slate-800 p-2 bg-slate-700 text-white rounded-full m-2 font-bold">
+            Load posts
+          </button>
         </div>
         <div>
-          <div>
-            <button>Load posts</button>
-          </div>
-          <div>
-            <button>Create a new post</button>
-          </div>
-        </div>
-        <div>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>User ID</th>
-                <th>Title</th>
-                <th>Body</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                Posts.map(({id,userId,title,body}, index)=>(
-                  <tr key={index}>
-                    <td>Post Id: {id}</td>
-                    <td>User Id: {userId}</td>
-                    <td>Title: {title}</td>
-                    <td>Body: {body}</td>
-                    <td>
-                      <button>Delete</button>
-                      <button>Edit</button>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+          <button className="border-2 p-2 border-slate-800 bg-slate-700 text-white rounded-full m-2 font-bold">
+            Create a new post
+          </button>
         </div>
       </div>
-    );
-  }
+      <div className="grid md:grid-cols-4">
+        {
+          Posts.map(post=> <PostCard key={post.id} title={post.title} body={post.body} />)
+        }
+      </div>   
+    </div>
+  );
+};
 
-  export default PostList;
+export default PostList;
