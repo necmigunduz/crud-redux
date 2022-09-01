@@ -6,14 +6,13 @@ import { getPosts } from "../../api/postSlice";
 const PostList = () => {
   const dispatch = useDispatch();
   const { entities, loading } = useSelector((state) => state.posts);
-
+  console.log(entities)
   useEffect(() => {
     dispatch(getPosts());
   }, [dispatch]);
 
   if (loading) return <p>Loading...</p>;
-  if (!loading) return <p>An error occurred at fetching posts!</p>
-
+  if (entities.length === 0 && !loading) return <p>Something went wrong!</p>
   return (
     <div className="mx-8 my-8">
     <div>
