@@ -1,10 +1,10 @@
 import TextField from "../../components/textfield";
 import TextArea from "../../components/textarea";
+
 const CreatePost = () => {
   const submitForm = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    console.log(formData);
     const inputObject = Object.fromEntries(formData);
     console.log(inputObject);
   };
