@@ -45,7 +45,29 @@ export const deletePost = createAsyncThunk(
       console.log(error.message);
     }
   }
-);
+)
+
+export const editPost = createAsyncThunk("posts/editPost", async(initialState,data)=>{
+  try {
+    const { id, title, body } = initialState;
+    const data = {
+      title: title,
+      body: body
+    }
+    const res = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(data)
+        }
+    )
+    if (res?.status === 200) return initialState;
+    return `${res.status} : ${res.statusText}`;
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 
 export const postSlice = createSlice({
   name: "posts",
