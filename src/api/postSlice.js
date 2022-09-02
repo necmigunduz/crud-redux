@@ -16,20 +16,31 @@ export const getPosts = createAsyncThunk("posts/getPosts", async (thunkAPI) => {
     console.log(error);
   }
 });
-
+export const createPost = createAsyncThunk("posts/createPost", async (data) => {
+  try {
+    const res = await fetch('https://jsonplaceholder.typicode.com/posts',{
+      method: 'POST',
+      body: JSON.stringify(data)
+    })
+    const post = res.json()
+    return post
+  } catch (error) {
+    console.log(error)
+  }
+})
 export const deletePost = createAsyncThunk(
   "posts/deletePost",
   async (initialState) => {
     try {
       const { id } = initialState;
-      const response = await fetch(
+      const res = await fetch(
         `https://jsonplaceholder.typicode.com/posts/${id}`,
         {
           method: "DELETE",
         }
       );
-      if (response?.status === 200) return initialState;
-      return `${response.status} : ${response.statusText}`;
+      if (res?.status === 200) return initialState;
+      return `${res.status} : ${res.statusText}`;
     } catch (error) {
       console.log(error.message);
     }
@@ -59,10 +70,13 @@ export const postSlice = createSlice({
         }
 
         const { id } = action.payload;
-        console.log(state.posts)
         const OldPosts = state.posts.filter((post) => post.id !== id);
         state.posts = OldPosts;
-      });
+      })
+      .addCase(createPost.fulfilled, (state,action)=> {
+        console.log(action.meta.arg.data)
+        state.posts = [...state.posts, action.meta.arg.data]
+      })
   },
 });
 
