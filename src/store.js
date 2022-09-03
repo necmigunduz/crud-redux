@@ -5,4 +5,7 @@ export default configureStore({
   reducer: {
     posts: postReducer
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
+  })
 });
