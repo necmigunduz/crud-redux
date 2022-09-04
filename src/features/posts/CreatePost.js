@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux";
 import { createPost } from "../../api/postSlice";
-import { v4 as uuidv4 } from "uuid"
 import { useNavigate } from "react-router-dom";
 import TextField from "../../components/textfield";
 import TextArea from "../../components/textarea";
@@ -14,8 +13,7 @@ const CreatePost = () => {
     const formData = new FormData(e.target);
     const inputObject = Object.fromEntries(formData);
     const data = {
-      userId: uuidv4(),
-      id: uuidv4(),
+      userId: 1,
       title: inputObject.title,
       body: inputObject.body
     }

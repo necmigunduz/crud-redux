@@ -4,7 +4,6 @@ const initialState = {
   posts: [],
   loading: false,
 };
-
 export const getPosts = createAsyncThunk("posts/getPosts", async () => {
   try {
     const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
@@ -18,16 +17,40 @@ export const getPosts = createAsyncThunk("posts/getPosts", async () => {
 });
 export const createPost = createAsyncThunk("posts/createPost", async (data) => {
   try {
+    const {userId, title, body } = data.data
+    
     const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
       method: "POST",
-      body: JSON.stringify(data),
+      headers: { 'Content-type': 'application/json; charset=UTF-8', },
+      body: JSON.stringify({userId,title,body}),
     });
-    const post = res.json();
-    return post;
+    const post = await res.json()
+    return post
   } catch (error) {
     console.log(error);
   }
 });
+export const editPost = createAsyncThunk(
+  "posts/editPost",
+  async (initialState, data) => {
+    try {
+      const { userId, id, title, body } = initialState.data;
+      
+      const res = await fetch(
+        `https://jsonplaceholder.typicode.com/posts/${id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({userId, id, title, body})
+        }
+      )
+      const post = await res.json()
+      return post
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const deletePost = createAsyncThunk(
   "posts/deletePost",
   async (initialState) => {
@@ -48,44 +71,34 @@ export const deletePost = createAsyncThunk(
   }
 );
 
-export const editPost = createAsyncThunk(
-  "posts/editPost",
-  async (initialState, data) => {
-    try {
-      const { id } = initialState.data;
-      
-      const res = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${id}`,
-        {
-          method: 'PUT',
-          body: JSON.stringify(data)
-        }
-      )
-      const post = res.json()
-      console.log(post)
-      return post
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
-
 export const postSlice = createSlice({
   name: "posts",
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getPosts.pending, (state) => ({
-        loading: true,
-      }))
-      .addCase(getPosts.fulfilled, (state, action) => ({
-        ...state,
-        posts: action.payload,
-        loading: false,
-      }))
+      .addCase(getPosts.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getPosts.fulfilled, (state, action) => {
+        state.posts = action.payload
+        state.loading = false
+      })
       .addCase(getPosts.rejected, (state) => ({
         loading: false,
       }))
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.posts = [...state.posts, action.payload]
+      })
+      .addCase(editPost.fulfilled, (state, action) => {    
+        if (!action?.payload.id) {
+          console.log("could not delete");
+          return;
+        }
+        const { id } = action.payload;
+        const OldPosts = state.posts.filter((post) => post.id !== id);
+        OldPosts.push(action.payload)
+        state.posts = OldPosts;
+      })
       .addCase(deletePost.fulfilled, (state, action) => {
         if (!action?.payload.id) {
           console.log("could not delete");
@@ -95,17 +108,6 @@ export const postSlice = createSlice({
         const OldPosts = state.posts.filter((post) => post.id !== id);
         state.posts = OldPosts;
       })
-      .addCase(createPost.fulfilled, (state, action) => ({
-        posts: [...state.posts, action.meta.arg.data]
-      }))
-      .addCase(editPost.fulfilled, (state, action) => {
-        if (!action?.payload.id) {
-          console.log("could not update");
-          return;
-        }
-        const { id, title, body } = action.meta.arg.data
-        
-      });
   },
 });
 

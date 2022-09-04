@@ -10,11 +10,12 @@ const EditPost = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const params = useParams()
-
+  
   const currentPost = posts.filter(post=>post.id === Number(params.id))
-  const { title, body } = currentPost[0]
-
+  const { userId, title, body } = currentPost[0]
+ 
   const [values, setValues] = useState({
+    userId,
     title,
     body
   })
@@ -22,14 +23,12 @@ const EditPost = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     setValues({title:'',body:''})
-    // const formData = new FormData(e.target);
-    // const inputObject = Object.fromEntries(formData);
     const data = {
+      userId: values.userId,
       id: params.id,
       title: values.title,
       body: values.body
     }
-    console.log(data)
     dispatch(editPost({data}))
     navigate('/')
   }

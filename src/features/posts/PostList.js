@@ -9,7 +9,7 @@ const PostList = () => {
   const { posts, loading } = useSelector((state) => state.posts);
   useEffect(() => {
     dispatch(getPosts());
-  }, [dispatch]);
+  },[dispatch] );
  
   if (loading) return <p>Loading...</p>;
   if (posts.length === 0 && !loading) return <p>Something went wrong!</p>
