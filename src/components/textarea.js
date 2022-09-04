@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TextArea = ({ label, id, placeholder, onKeyDown }) => {
+const TextArea = ({ label, id, placeholder, onKeyDown, value, onChange }) => {
     return (
       <div className='flex flex-col'>
           <label htmlFor={id} className='mb-2 text-base text-gray-800 font-bold'>{label}</label>
@@ -9,6 +9,8 @@ const TextArea = ({ label, id, placeholder, onKeyDown }) => {
               className='bg-gray-200 px-6 border-8 outline-none rounded-3xl'
               onKeyDown={onKeyDown}
               placeholder={placeholder}
+              value={value}
+              onChange={onChange}
           >
           </textarea>
       </div>

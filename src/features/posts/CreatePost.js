@@ -8,6 +8,7 @@ import TextArea from "../../components/textarea";
 const CreatePost = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
   const submitForm = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -21,6 +22,7 @@ const CreatePost = () => {
     dispatch(createPost({data}))
     navigate('/')
   };
+  
   const handleKeyDown = (e) => {
     e.target.style.height = "inherit";
     e.target.style.height = `${e.target.scrollHeight}px`;

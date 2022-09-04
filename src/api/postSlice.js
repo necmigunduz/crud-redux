@@ -33,6 +33,7 @@ export const deletePost = createAsyncThunk(
   async (initialState) => {
     try {
       const { id } = initialState;
+      console.log(id)
       const res = await fetch(
         `https://jsonplaceholder.typicode.com/posts/${id}`,
         {
@@ -49,20 +50,20 @@ export const deletePost = createAsyncThunk(
 
 export const editPost = createAsyncThunk(
   "posts/editPost",
-  async (initialState,data) => {
+  async (initialState, data) => {
     try {
-      const { id } = initialState;
-
+      const { id } = initialState.data;
+      
       const res = await fetch(
         `https://jsonplaceholder.typicode.com/posts/${id}`,
         {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data })
+          body: JSON.stringify(data)
         }
-      );
+      )
       const post = res.json()
-      return post;
+      console.log(post)
+      return post
     } catch (error) {
       console.log(error);
     }
@@ -98,6 +99,11 @@ export const postSlice = createSlice({
         posts: [...state.posts, action.meta.arg.data]
       }))
       .addCase(editPost.fulfilled, (state, action) => {
+        if (!action?.payload.id) {
+          console.log("could not update");
+          return;
+        }
+        const { id, title, body } = action.meta.arg.data
         
       });
   },
