@@ -3,7 +3,7 @@
 This is an app using CRUD operations with Redux Toolkit and React. For styling the project, Tailwind CSS is used. A user can create posts, view all the posts, edit posts, and delete posts. This app works ascynhronously and it does use the public api of `https://jsonplaceholder.typicode.com/posts` to store the information.
 
 #### Page screenshot: 
-![screenshot](https://github.com/necmigunduz/verde-tailwind-rtk/blob/master/screenshot.png)
+![screenshot](https://github.com/necmigunduz/crud-redux/blob/master/Screenshot.png)
 
 ## Built With
 
